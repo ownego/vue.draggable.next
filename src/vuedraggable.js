@@ -310,7 +310,9 @@ const draggableComponent = defineComponent({
       return move(sendEvent, originalEvent);
     },
 
-    onDragEnd() {
+    onDragEnd(evt) {
+      const fallback = () => {};
+      Array.isArray(evt?.items) && evt.items.forEach(Sortable?.utils?.deselect ?? fallback);
       draggingElement = null;
     }
   }
