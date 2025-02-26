@@ -424,7 +424,7 @@ const draggableComponent = defineComponent({
     },
 
     onDragUpdateMulti(evt) {
-      const { items, from } = evt;
+      const { items, from, item } = evt;
       // for match item index and element index
       const headerSize =
         (this.$slots.header ? this.$slots.header() : []).length || 0;
@@ -441,7 +441,14 @@ const draggableComponent = defineComponent({
       );
       // move items
       const oldIndicies = itemsWithIndex.map(({ index }) => index - headerSize);
-      const newIndex = this.getVmIndexFromDomIndex(evt.newIndex);
+
+      let newIndex = this.getVmIndexFromDomIndex(evt.newIndex);
+      const relativeIndex = items.findIndex(e => e === item);
+
+      if (relativeIndex) {
+        newIndex = newIndex - relativeIndex;
+      }
+
       // note: Array.from = prevent sort change side effect
       this.updatePositions(Array.from(oldIndicies), newIndex);
       // emit change
